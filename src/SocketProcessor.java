@@ -1,5 +1,3 @@
-package simpletcpserver;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,28 +21,20 @@ public class SocketProcessor implements Runnable {
     @Override
     public void run() {
         try {
+            //String page = readInputHeaders();
             String page = (new StringBuilder("www/").append(readInputHeaders().substring(1))).toString();
+            //page = "www/".concat(page.substring(1));
+            System.out.println(page);
             if(page.equals("www/"))
                 page = "www/index.html";
-            System.out.println(page);
-            String ext = page.split("\\.")[page.split("\\.").length - 1];
-            System.out.println(ext);
             StringBuilder html = new StringBuilder("");
             try{
-                BufferedReader br = null;
-                if(ext.equals("html") || ext.equals("htm")){
-                    br = new BufferedReader(new InputStreamReader(new FileInputStream(page)));
-                }
-                else if(ext.equals("php")){
-                    Process php = (Runtime.getRuntime().exec("php ".concat(page)));
-                    br = new BufferedReader(new InputStreamReader(php.getInputStream(), "UTF-8"));
-                }
+                System.out.println(html.toString());
+                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(page)));
                 String line;
-                while((line = br.readLine())!= null){
-                    if(line.contains("Could not open"))
-                        throw new FileNotFoundException();
+                while((line = br.readLine())!= null)
                     html.append(line);
-                }
+                  
             }catch(FileNotFoundException | NullPointerException e){
                 System.out.print("Err:\t");
                 System.out.println(e.getMessage());
